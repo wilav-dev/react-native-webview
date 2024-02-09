@@ -1,5 +1,6 @@
 package com.reactnativecommunity.webview
 
+import android.app.AlertDialog
 import android.app.DownloadManager
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
@@ -13,6 +14,10 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.webkit.CookieManager
 import android.webkit.DownloadListener
+import android.webkit.JsResult
+import android.text.InputType
+import android.webkit.JsPromptResult
+import android.widget.EditText
 import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.webkit.WebSettingsCompat
