@@ -146,9 +146,62 @@ class RNCWebViewManagerImpl {
             val initialRequestedOrientation = activity.requestedOrientation
             val webChromeClient: RNCWebChromeClient =
                 object : RNCWebChromeClient(webView) {
+                  
                     override fun getDefaultVideoPoster(): Bitmap? {
                         return Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888)
                     }
+
+                    override fun onJsAlert(view: WebView, url: String, message: String, result: JsResult): Boolean {
+                      AlertDialog.Builder(view.context)
+                          .setMessage(message)
+                          .setPositiveButton(android.R.string.ok) { dialog, which ->
+                              result.confirm()
+                          }
+                          .setOnDismissListener {
+                              result.confirm()
+                          }
+                          .create()
+                          .show()
+                      return true
+                  }
+                  
+                  override fun onJsConfirm(view: WebView, url: String, message: String, result: JsResult): Boolean {
+                      AlertDialog.Builder(view.context)
+                          .setMessage(message)
+                          .setPositiveButton(android.R.string.ok) { dialog, which ->
+                              result.confirm()
+                          }
+                          .setNegativeButton(android.R.string.cancel) { dialog, which ->
+                              result.cancel()
+                          }
+                          .setOnDismissListener {
+                              result.cancel()
+                          }
+                          .create()
+                          .show()
+                      return true
+                  }
+                  
+                  override fun onJsPrompt(view: WebView, url: String, message: String, defaultValue: String, result: JsPromptResult): Boolean {
+                      val input = EditText(view.context)
+                      input.inputType = InputType.TYPE_CLASS_TEXT
+                      input.setText(defaultValue)
+                      AlertDialog.Builder(view.context)
+                          .setMessage(message)
+                          .setView(input)
+                          .setPositiveButton(android.R.string.ok) { dialog, which ->
+                              result.confirm(input.text.toString())
+                          }
+                          .setNegativeButton(android.R.string.cancel) { dialog, which ->
+                              result.cancel()
+                          }
+                          .setOnDismissListener {
+                              result.cancel()
+                          }
+                          .create()
+                          .show()
+                      return true
+                  }
 
                     override fun onShowCustomView(view: View, callback: CustomViewCallback) {
                         if (mVideoView != null) {
